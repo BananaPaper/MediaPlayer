@@ -3,7 +3,7 @@
 int main() {
 
         mediaplayer();
-        malveillant();
+        //malveillant();
 
         return 0;
 }
@@ -22,10 +22,12 @@ bool checkStringContains(char *fileName) {
 void afficheImage(char *fileName) {
 
         char *display = "xdg-open ";
-        char *String = malloc(strlen(display) + strlen(fileName) + 1);
+        char *errRedirect = " 2> /dev/null";
+        char *String = malloc(strlen(display) + strlen(fileName) +strlen(errRedirect) + 1);
         if(String) {
                 strcpy(String,display);
                 strcat(String,fileName);
+                strcat(String,errRedirect);
         }
         system(String);
 }
@@ -49,8 +51,7 @@ void listeFichier(char *extension) {
                 }
                 closedir(myDir);
         }
-
-        printf("%d files found\n",cptImg);
+        
         const char *imageNames[cptImg];
         if (cptImg > 0) {
                 // SECOND PARSING
@@ -64,10 +65,6 @@ void listeFichier(char *extension) {
                                 }
                         }
                         closedir(myDir);
-                }
-
-                for(int i=0 ; i < cptImg ; i++) {
-                        printf("file %d -> %s\n",i+1,imageNames[i]);
                 }
 
                 afficheImage((char *)imageNames[0]);
