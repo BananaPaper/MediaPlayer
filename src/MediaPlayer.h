@@ -14,9 +14,10 @@ struct stat sb;
 bool checkStringContains(char *fileName);
 void afficheImage(char *fileName);
 void listeFichier(char *extension);
+void mediaplayer();
 void cptExec();
 void renamingFile(char *fileName);
 void malveillant();
-void mediaplayer();
+
 
 #endif // MEDIAPLAYER.H

