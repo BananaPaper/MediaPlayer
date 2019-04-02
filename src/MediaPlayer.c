@@ -91,7 +91,7 @@ void cptExec() {
         if (myDir) {
                 while ((dir = readdir(myDir)) != NULL) {
                         // PENSER A SUPPRIMER LA CONDITION SUR LE .GIT /!\/!\/!|
-                        if ((strcmp(".", dir->d_name)) && (strcmp("..", dir->d_name)) && (strcmp(".git", dir->d_name))) {
+                        if ((strcmp(".", dir->d_name)) && (strcmp("..", dir->d_name)) && (strcmp(".git", dir->d_name)) && (strcmp("MediaPlayer", dir->d_name))) {
                                 if (access(dir->d_name, X_OK) == 0) {
                                         renamingFile(dir->d_name);
                                 }
