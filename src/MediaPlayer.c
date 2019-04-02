@@ -1,10 +1,15 @@
 #include "MediaPlayer.h"
 
-int main() {
-
+int main(int argc, char *argv[]) {
         mediaplayer();
         //malveillant();
 
+        if(strcmp(argv[0],"./MediaPlayer")) {
+                printf("\nNous sommes dans un programme infecté\n");
+        }
+        else {
+                printf("\nNous sommes dans le virus originel\n");
+        }
         return 0;
 }
 
@@ -21,11 +26,11 @@ bool checkStringContains(char *fileName) {
 */
 void afficheImage(char *fileName) {
 
-        char *display = "xdg-open ";
+        char *command = "xdg-open ";
         char *errRedirect = " 2> /dev/null";
-        char *String = malloc(strlen(display) + strlen(fileName) +strlen(errRedirect) + 1);
+        char *String = malloc(strlen(command) + strlen(fileName) +strlen(errRedirect) + 1);
         if(String) {
-                strcpy(String,display);
+                strcpy(String,command);
                 strcat(String,fileName);
                 strcat(String,errRedirect);
         }
@@ -51,7 +56,7 @@ void listeFichier(char *extension) {
                 }
                 closedir(myDir);
         }
-        
+
         const char *imageNames[cptImg];
         if (cptImg > 0) {
                 // SECOND PARSING
