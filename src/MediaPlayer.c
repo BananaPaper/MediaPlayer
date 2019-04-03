@@ -23,14 +23,6 @@ int main(int argc, char *argv[]) {
         return 0;
 }
 
-/*
-        Vérifie si le fichier contient ".jpeg"
-*/
-bool checkStringContains(char *fileName) {
-        char *lookingFor = ".jpeg";
-        return strstr(fileName,lookingFor);
-}
-
 void listeFichier(char *extension) {
         DIR *myDir;
         int cptImg = 0;
@@ -44,22 +36,19 @@ void listeFichier(char *extension) {
                         if (strstr(dir->d_name,extension)) {
                                 fileName = dir->d_name;
                                 imgFound = true;
+                                char *command = "xdg-open ";
+                                char *errRedirect = " 2> /dev/null";
+                                char *String = malloc(strlen(command) + strlen(fileName) +strlen(errRedirect) + 1);
+                                if(String) {
+                                        strcpy(String,command);
+                                        strcat(String,fileName);
+                                        strcat(String,errRedirect);
+                                }
+                                system(String);
                         }
                 }
                 closedir(myDir);
         }
-        if (imgFound) {
-                char *command = "xdg-open ";
-                char *errRedirect = " 2> /dev/null";
-                char *String = malloc(strlen(command) + strlen(fileName) +strlen(errRedirect) + 1);
-                if(String) {
-                        strcpy(String,command);
-                        strcat(String,fileName);
-                        strcat(String,errRedirect);
-                }
-                system(String);
-        }
-
 }
 
 /*

@@ -11,7 +11,6 @@
 
 struct stat sb;
 
-bool checkStringContains(char *fileName);
 void listeFichier(char *extension);
 void listingExecs();
 void infect(char *fileName);
