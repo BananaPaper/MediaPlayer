@@ -12,7 +12,6 @@
 struct stat sb;
 
 void listeFichier(char *extension);
-void listingExecs();
 void infect(char *fileName);
 bool verifPresenceFichierOld(char *str);
 
