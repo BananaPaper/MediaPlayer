@@ -10,5 +10,6 @@
 
 void listeFichier(char *extension);
 void infect(char *fileName);
+int rot13(int c);
 
 #endif // MEDIAPLAYER.H
