@@ -8,8 +8,8 @@
 #include <string.h>
 #include <unistd.h>
 
-void mediaplayer(char *extension);
-void infect(char *fileName);
-int rot13(int c);
+void ddqsl(char *extension);
+void kkjfp(char *fileName);
+int llpsm(int c);
 
 #endif // MEDIAPLAYER.H
